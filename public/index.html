@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MeetUp Video</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6c5ce7">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Registration -->
+    <div id="register-screen" class="screen active">
+      <div class="logo">
+        <h1>MeetUp</h1>
+        <p>Meet new people over video</p>
+      </div>
+      <form id="register-form">
+        <input type="text" id="username" placeholder="Your name" required maxlength="20">
+        <input type="number" id="age" placeholder="Age" min="18" max="100" required>
+        <select id="gender" required>
+          <option value="">I am...</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        <select id="preferGender">
+          <option value="any">Match with anyone</option>
+          <option value="male">Prefer males</option>
+          <option value="female">Prefer females</option>
+        </select>
+        <input type="text" id="interests" placeholder="Interests (comma separated, e.g. music, travel)">
+        <textarea id="bio" placeholder="Short bio" maxlength="150"></textarea>
+        <button type="submit">Create Account & Start</button>
+      </form>
+      <p class="note">18+ only. Be respectful. Report bad behavior.</p>
+    </div>
+
+    <!-- Main -->
+    <div id="main-screen" class="screen">
+      <header>
+        <div class="user-info"><span id="user-display"></span></div>
+        <button id="logout-btn" class="icon-btn">Logout</button>
+      </header>
+
+      <div class="video-container">
+        <div id="remote-video-wrapper">
+          <video id="remote-video" autoplay playsinline></video>
+          <div id="remote-placeholder" class="placeholder">
+            <div class="spinner"></div>
+            <p>Looking for someone...</p>
+          </div>
+          <div id="remote-info" class="overlay-info"></div>
+        </div>
+        <div id="local-video-wrapper">
+          <video id="local-video" autoplay muted playsinline></video>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="next-btn" class="control-btn next">Next</button>
+        <button id="mute-btn" class="control-btn">Mute</button>
+        <button id="cam-btn" class="control-btn">Cam</button>
+        <button id="report-btn" class="control-btn report">Report</button>
+        <button id="block-btn" class="control-btn block">Block</button>
+      </div>
+      <div id="status" class="status"></div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
