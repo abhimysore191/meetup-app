@@ -26,7 +26,22 @@ const logoutBtn = document.getElementById('logout-btn');
 const iceServers = {
   iceServers: [
     { urls: 'stun:stun.l.google.com:19302' },
-    { urls: 'stun:stun1.l.google.com:19302' }
+    { urls: 'stun:stun1.l.google.com:19302' },
+    {
+      urls: 'turn:openrelay.metered.ca:80',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    },
+    {
+      urls: 'turn:openrelay.metered.ca:443',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    },
+    {
+      urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+      username: 'openrelayproject',
+      credential: 'openrelayproject'
+    }
   ]
 };
 
@@ -129,8 +144,12 @@ function endCall() {
 socket.on('matched', async ({ partnerId: id, partner }) => {
   partnerId = id;
   remoteInfo.textContent = `${partner.username}, ${partner.age} • ${partner.interests?.slice(0,2).join(', ') || ''}`;
-  setStatus(`Matched with ${partner.username}!`);
-  await startCall(true); // both sides will handle offer/answer via signaling
+  setStatus(`Matched with ${partner.username}! Connecting...`);
+
+  // Only the user with the "higher" socket ID creates the offer
+  // This prevents both sides from creating offers at the same time
+  const isInitiator = socket.id > partnerId;
+  await startCall(isInitiator);
 });
 
 socket.on('signal', async ({ from, signal }) => {
